@@ -27,5 +27,5 @@ func (l *Logger) ModeFlagSet(mode *Flag) {
 		return
 	}
 
-	l.logger.LogMessage(gologger.NewLogMessage("Mode flag set", gologgerstatus.StatusDebug, nil, mode.String()))
+	l.logger.LogMessage(gologger.NewLogMessage("mode flag set", gologgerstatus.StatusDebug, nil, mode.String()))
 }
