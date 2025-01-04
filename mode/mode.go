@@ -57,3 +57,9 @@ func SetFlag() {
 		"Specify mode. Allowed values are: dev, prod, debug. Default is the development mode",
 	)
 }
+
+// init initializes the mode flag and parses the flags
+func init() {
+	SetFlag()
+	flag.Parse()
+}
