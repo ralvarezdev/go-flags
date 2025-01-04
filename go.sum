@@ -4,3 +4,4 @@ github.com/ralvarezdev/go-logger v0.2.1 h1:DamvM2hbiJlxlQ+3pd2yNWowSWm7XBFVjJPg7
 github.com/ralvarezdev/go-logger v0.2.1/go.mod h1:v5OvFrkS+wsYNTCVegXWiRhBtcYrQJr4LDMDntvpAos=
 github.com/ralvarezdev/go-logger v0.2.2 h1:j58spza2L6s+vAibifHSuUPrXm0+6nWZWR3SOg8ihBk=
 github.com/ralvarezdev/go-logger v0.2.2/go.mod h1:v5OvFrkS+wsYNTCVegXWiRhBtcYrQJr4LDMDntvpAos=
+github.com/ralvarezdev/go-logger v0.3.0/go.mod h1:v5OvFrkS+wsYNTCVegXWiRhBtcYrQJr4LDMDntvpAos=

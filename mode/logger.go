@@ -30,8 +30,7 @@ func (l *Logger) ModeFlagSet(mode *Flag) {
 	l.logger.LogMessage(
 		gologger.NewLogMessage(
 			"mode flag set",
-			gologgerstatus.StatusDebug,
-			nil,
+			gologgerstatus.Debug,
 			mode.String(),
 		),
 	)
