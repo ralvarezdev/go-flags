@@ -1,6 +1,7 @@
 package go_mode_flag
 
 import (
+	"flag"
 	"fmt"
 	"strings"
 )
@@ -46,4 +47,18 @@ func (f *Flag) Set(value string) error {
 		"invalid value %q, allowed values are: %s", value,
 		strings.Join(f.allowed, ", "),
 	)
+}
+
+// SetFlag sets the mode flag
+func SetFlag(value flag.Value, name string, usage string) {
+	flag.Var(
+		value,
+		name,
+		usage,
+	)
+}
+
+// init initializes the flags
+func init() {
+	flag.Parse()
 }
