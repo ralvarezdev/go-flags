@@ -57,8 +57,3 @@ func SetFlag(value flag.Value, name string, usage string) {
 		usage,
 	)
 }
-
-// init initializes the flags
-func init() {
-	flag.Parse()
-}
