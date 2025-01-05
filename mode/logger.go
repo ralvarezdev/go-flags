@@ -5,6 +5,10 @@ import (
 	gologgerstatus "github.com/ralvarezdev/go-logger/status"
 )
 
+var (
+	LoggerName = "MODE FLAG"
+)
+
 // Logger is the logger for the flag
 type Logger struct {
 	logger gologger.Logger
@@ -28,6 +32,7 @@ func (l *Logger) ModeFlagSet(mode *Flag) {
 	}
 
 	l.logger.LogMessage(
+		LoggerName,
 		gologger.NewLogMessage(
 			"mode flag set",
 			gologgerstatus.Debug,
