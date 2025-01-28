@@ -15,8 +15,8 @@ type Flag struct {
 // NewFlag creates a new Flag
 func NewFlag(value string, allowed []string) *Flag {
 	return &Flag{
-		value:   value,
-		allowed: allowed,
+		value,
+		allowed,
 	}
 }
 
