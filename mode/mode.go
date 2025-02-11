@@ -9,7 +9,7 @@ const (
 	FlagName = "m"
 
 	// FlagUsage is the usage of the mode flag
-	FlagUsage = "Specify mode. Allowed values are: dev, prod, debug. Default is the dev mode"
+	FlagUsage = "Specify mode. Allowed values are: dev, prod, debug, migrate. Default is the dev mode"
 )
 
 type (
@@ -31,6 +31,9 @@ var (
 
 	// Debug is the debug mode
 	Debug Mode = "debug"
+
+	// Migrate is the migration mode
+	Migrate Mode = "migrate"
 )
 
 // NewFlag creates a new Flag with allowed values
@@ -48,7 +51,10 @@ func (f *Flag) Mode() Mode {
 	if f.IsDev() {
 		return Dev
 	}
-	return Debug
+	if f.IsDebug() {
+		return Debug
+	}
+	return Migrate
 }
 
 // IsDev returns true if it's the development mode
@@ -66,10 +72,15 @@ func (f *Flag) IsDebug() bool {
 	return f.Value() == string(Debug)
 }
 
+// IsMigrate returns true if it's the migration mode
+func (f *Flag) IsMigrate() bool {
+	return f.Value() == string(Migrate)
+}
+
 // ModeFlag is the environment mode
 var ModeFlag = NewFlag(
 	string(Dev),
-	[]string{string(Dev), string(Prod), string(Debug)},
+	[]string{string(Dev), string(Prod), string(Debug), string(Migrate)},
 )
 
 // init initializes the mode flag
