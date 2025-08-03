@@ -1,89 +1,137 @@
 package mode
 
 import (
+	"fmt"
+	"strings"
+
 	goflags "github.com/ralvarezdev/go-flags"
 )
 
 const (
-	// FlagName is the name of the mode flag
+	// FlagName is the name of the mode flag.
 	FlagName = "m"
 
-	// FlagUsage is the usage of the mode flag
-	FlagUsage = "Specify mode. Allowed values are: dev, prod, debug, migrate. Default is the dev mode"
+	// FlagUsage is the usage of the mode flag.
+	// It describes allowed values and the default mode.
+	FlagUsage = "Specify mode. Allowed values are: %s. Default is the %s mode."
 )
 
 type (
-	// Mode is the environment mode
+	// Mode represents the environment mode as a string.
 	Mode string
 
-	// Flag is a custom flag type for mode
+	// Flag is a custom flag type for mode, embedding goflags.Flag.
 	Flag struct {
 		goflags.Flag
 	}
 )
 
 var (
-	// Dev is the development mode
+	// Dev is the development mode.
 	Dev Mode = "dev"
 
-	// Prod is the production mode
+	// Prod is the production mode.
 	Prod Mode = "prod"
 
-	// Debug is the debug mode
+	// Debug is the debug mode.
 	Debug Mode = "debug"
 
-	// Migrate is the migration mode
+	// Migrate is the migration mode.
 	Migrate Mode = "migrate"
+
+	// DefaultMode is the default mode (development).
+	DefaultMode = Dev
+
+	// AllowedModes is the list of allowed modes.
+	AllowedModes = []string{
+		string(Dev), string(Prod), string(Debug), string(Migrate),
+	}
+
+	// ModeFlag is the environment mode flag instance.
+	ModeFlag = NewFlag(
+		string(DefaultMode),
+		nil,
+		AllowedModes,
+		FlagName,
+		fmt.Sprintf(
+			FlagUsage,
+			strings.Join(AllowedModes, ", "),
+			string(Dev),
+		),
+	)
 )
 
-// NewFlag creates a new Flag with allowed values
-func NewFlag(defaultValue string, allowed []string) *Flag {
+// NewFlag creates a new Flag with allowed values.
+//
+// Parameters:
+//
+//	defaultValue - the default value for the flag.
+//	value - pointer to a string to store the flag value (can be nil).
+//	allowed - slice of allowed string values.
+//	name - the flag name.
+//	usage - the usage description for the flag.
+//
+// Returns:
+//
+//	A pointer to the created Flag.
+func NewFlag(
+	defaultValue string,
+	value *string,
+	allowed []string,
+	name string,
+	usage string,
+) *Flag {
 	return &Flag{
-		Flag: *goflags.NewFlag(defaultValue, allowed),
+		Flag: *goflags.NewFlag(defaultValue, value, allowed, name, usage),
 	}
 }
 
-// Mode returns the mode
-func (f *Flag) Mode() Mode {
-	if f.IsProd() {
-		return Prod
-	}
-	if f.IsDev() {
-		return Dev
-	}
-	if f.IsDebug() {
-		return Debug
-	}
-	return Migrate
+// Default returns the default value of the flag.
+//
+// Returns:
+//
+//	The default value.
+func (f *Flag) Default() string {
+	return f.Default()
 }
 
-// IsDev returns true if it's the development mode
+// IsDev returns true if the current mode is development.
+//
+// Returns:
+//
+//	True if development mode, false otherwise.
 func (f *Flag) IsDev() bool {
 	return f.Value() == string(Dev)
 }
 
-// IsProd returns true if it's the production mode
+// IsProd returns true if the current mode is production.
+//
+// Returns:
+//
+//	True if production mode, false otherwise.
 func (f *Flag) IsProd() bool {
 	return f.Value() == string(Prod)
 }
 
-// IsDebug returns true if it's the debug mode
+// IsDebug returns true if the current mode is debug.
+//
+// Returns:
+//
+//	True if debug mode, false otherwise.
 func (f *Flag) IsDebug() bool {
 	return f.Value() == string(Debug)
 }
 
-// IsMigrate returns true if it's the migration mode
+// IsMigrate returns true if the current mode is migration.
+//
+// Returns:
+//
+//	True if migration mode, false otherwise.
 func (f *Flag) IsMigrate() bool {
 	return f.Value() == string(Migrate)
 }
 
-// ModeFlag is the environment mode
-var ModeFlag = NewFlag(
-	string(Dev),
-	[]string{string(Dev), string(Prod), string(Debug), string(Migrate)},
-)
-
-// init initializes the mode flag
+// init initializes the mode flag.
 func init() {
-	goflags.SetFlag(ModeFlag, FlagName, FlagUsage)
+	ModeFlag.SetFlag()
 }

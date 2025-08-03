@@ -1,4 +1,4 @@
-package go_mode_flag
+package go_flags
 
 import (
 	"flag"
@@ -6,50 +6,119 @@ import (
 	"strings"
 )
 
-// Flag is a custom flag type
-type Flag struct {
-	value   string
-	allowed []string
-}
+type (
+	// Flag is a custom flag type that restricts its value to a predefined set of allowed strings.
+	Flag struct {
+		defaultValue string
+		value        *string
+		allowed      []string
+		name         string
+		usage        string
+	}
+)
 
-// NewFlag creates a new Flag
-func NewFlag(value string, allowed []string) *Flag {
+// NewFlag creates a new Flag with a default value and a list of allowed values.
+//
+// Parameters:
+//
+//	defaultValue - the default value for the flag.
+//	value - the default value for the flag.
+//	allowed - slice of allowed string values.
+//	name - the name of the flag.
+//	usage - the usage description for the flag.
+//
+// Returns:
+//
+//	A pointer to the created Flag.
+func NewFlag(
+	defaultValue string,
+	value *string,
+	allowed []string,
+	name string,
+	usage string,
+) *Flag {
 	return &Flag{
+		defaultValue,
 		value,
 		allowed,
+		name,
+		usage,
 	}
 }
 
-// String returns the string representation of the flag value
+// Default returns the default value of the flag.
+//
+// Returns:
+//
+//	The default value of the flag as a string.
+func (f *Flag) Default() string {
+	return f.defaultValue
+}
+
+// String returns the string representation of the flag's current value.
+//
+// Returns:
+//
+//	The current value of the flag as a string.
 func (f *Flag) String() string {
-	return f.value
+	if f.value != nil {
+		return *f.value
+	}
+	return f.defaultValue
 }
 
-// Value returns the flag value
+// Value returns the current value of the flag.
+//
+// Returns:
+//
+//	The current value of the flag as a string.
 func (f *Flag) Value() string {
-	return f.value
+	return f.String()
 }
 
-// Allowed returns the allowed values
+// Allowed returns the list of allowed values for the flag.
+//
+// Returns:
+//
+//	The allowed values.
 func (f *Flag) Allowed() []string {
 	return f.allowed
 }
 
-// Set validates and sets the flag value
+// Set validates and sets the flag's value.
+//
+// Parameters:
+//
+//	value - the value to set.
+//
+// Returns:
+//
+//	An error if the value is not allowed, otherwise nil.
 func (f *Flag) Set(value string) error {
 	for _, v := range f.allowed {
 		if value == v {
-			f.value = value
+			f.value = &value
 			return nil
 		}
 	}
 	return fmt.Errorf(
-		"invalid value %q, allowed values are: %s", value,
+		ErrInvalidValue, value,
 		strings.Join(f.allowed, ", "),
 	)
 }
 
-// SetFlag sets the mode flag
+// SetFlag registers the custom flag with the standard flag package.
+func (f *Flag) SetFlag() {
+	SetFlag(f, f.name, f.usage)
+}
+
+// SetFlag registers the custom flag with the standard flag package.
+//
+// Parameters:
+//
+//	value - the flag.Value to register.
+//	name - the flag name.
+//	usage - the usage description for the flag.
 func SetFlag(value flag.Value, name string, usage string) {
 	flag.Var(
 		value,
