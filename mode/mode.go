@@ -7,15 +7,6 @@ import (
 	goflags "github.com/ralvarezdev/go-flags"
 )
 
-const (
-	// FlagName is the name of the mode flag.
-	FlagName = "m"
-
-	// FlagUsage is the usage of the mode flag.
-	// It describes allowed values and the default mode.
-	FlagUsage = "Specify mode. Allowed values are: %s. Default is the %s mode."
-)
-
 type (
 	// Mode represents the environment mode as a string.
 	Mode string
