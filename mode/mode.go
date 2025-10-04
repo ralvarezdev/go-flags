@@ -30,12 +30,19 @@ var (
 	// Migrate is the migration mode.
 	Migrate Mode = "migrate"
 
+	// Setup is the setup mode.
+	Setup Mode = "setup"
+
 	// DefaultMode is the default mode (development).
 	DefaultMode = Dev
 
 	// AllowedModes is the list of allowed modes.
 	AllowedModes = []string{
-		string(Dev), string(Prod), string(Debug), string(Migrate),
+		string(Dev),
+		string(Prod),
+		string(Debug),
+		string(Migrate),
+		string(Setup),
 	}
 
 	// ModeFlag is the environment mode flag instance.
@@ -83,6 +90,9 @@ func NewFlag(
 //
 //	The default value.
 func (f *Flag) Default() string {
+	if f == nil {
+		return ""
+	}
 	return f.Default()
 }
 
@@ -92,6 +102,9 @@ func (f *Flag) Default() string {
 //
 //	True if development mode, false otherwise.
 func (f *Flag) IsDev() bool {
+	if f == nil {
+		return false
+	}
 	return f.Value() == string(Dev)
 }
 
@@ -101,6 +114,9 @@ func (f *Flag) IsDev() bool {
 //
 //	True if production mode, false otherwise.
 func (f *Flag) IsProd() bool {
+	if f == nil {
+		return false
+	}
 	return f.Value() == string(Prod)
 }
 
@@ -110,6 +126,9 @@ func (f *Flag) IsProd() bool {
 //
 //	True if debug mode, false otherwise.
 func (f *Flag) IsDebug() bool {
+	if f == nil {
+		return false
+	}
 	return f.Value() == string(Debug)
 }
 
@@ -120,6 +139,18 @@ func (f *Flag) IsDebug() bool {
 //	True if migration mode, false otherwise.
 func (f *Flag) IsMigrate() bool {
 	return f.Value() == string(Migrate)
+}
+
+// IsSetup returns true if the current mode is setup.
+//
+// Returns:
+//
+//	True if setup mode, false otherwise.
+func (f *Flag) IsSetup() bool {
+	if f == nil {
+		return false
+	}
+	return f.Value() == string(Setup)
 }
 
 // init initializes the mode flag.

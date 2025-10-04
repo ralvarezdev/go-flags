@@ -52,6 +52,9 @@ func NewFlag(
 //
 //	The default value of the flag as a string.
 func (f *Flag) Default() string {
+	if f == nil {
+		return ""
+	}
 	return f.defaultValue
 }
 
@@ -61,6 +64,9 @@ func (f *Flag) Default() string {
 //
 //	The current value of the flag as a string.
 func (f *Flag) String() string {
+	if f == nil {
+		return ""
+	}
 	if f.value != nil {
 		return *f.value
 	}
@@ -73,6 +79,9 @@ func (f *Flag) String() string {
 //
 //	The current value of the flag as a string.
 func (f *Flag) Value() string {
+	if f == nil {
+		return ""
+	}
 	return f.String()
 }
 
@@ -82,6 +91,9 @@ func (f *Flag) Value() string {
 //
 //	The allowed values.
 func (f *Flag) Allowed() []string {
+	if f == nil {
+		return nil
+	}
 	return f.allowed
 }
 
@@ -95,6 +107,9 @@ func (f *Flag) Allowed() []string {
 //
 //	An error if the value is not allowed, otherwise nil.
 func (f *Flag) Set(value string) error {
+	if f == nil {
+		return ErrNilFlag
+	}
 	for _, v := range f.allowed {
 		if value == v {
 			f.value = &value

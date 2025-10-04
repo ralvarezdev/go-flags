@@ -1,5 +1,13 @@
 package go_flags
 
-var (
+import (
+	"errors"
+)
+
+const (
 	ErrInvalidValue = "invalid value %q, allowed values are: %s"
+)
+
+var (
+	ErrNilFlag = errors.New("flag cannot be nil")
 )
