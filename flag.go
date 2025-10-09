@@ -110,6 +110,14 @@ func (f *Flag) Set(value string) error {
 	if f == nil {
 		return ErrNilFlag
 	}
+
+	// Check if the allowed values are defined
+	if f.allowed == nil {
+		f.value = &value
+		return nil
+	}
+
+	// Validate the value against the allowed values
 	for _, v := range f.allowed {
 		if value == v {
 			f.value = &value
