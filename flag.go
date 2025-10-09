@@ -9,7 +9,7 @@ import (
 type (
 	// Flag is a custom flag type that restricts its value to a predefined set of allowed strings.
 	Flag struct {
-		defaultValue string
+		defaultValue *string
 		value        *string
 		allowed      []string
 		name         string
@@ -22,7 +22,6 @@ type (
 // Parameters:
 //
 //	defaultValue - the default value for the flag.
-//	value - the default value for the flag.
 //	allowed - slice of allowed string values.
 //	name - the name of the flag.
 //	usage - the usage description for the flag.
@@ -31,18 +30,16 @@ type (
 //
 //	A pointer to the created Flag.
 func NewFlag(
-	defaultValue string,
-	value *string,
+	defaultValue *string,
 	allowed []string,
 	name string,
 	usage string,
 ) *Flag {
 	return &Flag{
-		defaultValue,
-		value,
-		allowed,
-		name,
-		usage,
+		defaultValue: defaultValue,
+		allowed:      allowed,
+		name:         name,
+		usage:        usage,
 	}
 }
 
@@ -52,10 +49,10 @@ func NewFlag(
 //
 //	The default value of the flag as a string.
 func (f *Flag) Default() string {
-	if f == nil {
+	if f == nil || f.defaultValue == nil {
 		return ""
 	}
-	return f.defaultValue
+	return *f.defaultValue
 }
 
 // String returns the string representation of the flag's current value.
@@ -70,7 +67,10 @@ func (f *Flag) String() string {
 	if f.value != nil {
 		return *f.value
 	}
-	return f.defaultValue
+	if f.defaultValue == nil {
+		return ""
+	}
+	return *f.defaultValue
 }
 
 // Value returns the current value of the flag.

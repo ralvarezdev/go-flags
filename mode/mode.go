@@ -37,50 +37,49 @@ var (
 	DefaultMode = Dev
 
 	// AllowedModes is the list of allowed modes.
-	AllowedModes = []string{
-		string(Dev),
-		string(Prod),
-		string(Debug),
-		string(Migrate),
-		string(Setup),
+	AllowedModes = []Mode{
+		Dev,
+		Prod,
+		Debug,
+		Migrate,
+		Setup,
 	}
-
-	// ModeFlag is the environment mode flag instance.
-	ModeFlag = NewFlag(
-		string(DefaultMode),
-		nil,
-		AllowedModes,
-		FlagName,
-		fmt.Sprintf(
-			FlagUsage,
-			strings.Join(AllowedModes, ", "),
-			string(Dev),
-		),
-	)
 )
 
 // NewFlag creates a new Flag with allowed values.
 //
 // Parameters:
 //
-//	defaultValue - the default value for the flag.
-//	value - pointer to a string to store the flag value (can be nil).
+//	defaultMode - the default mode.
 //	allowed - slice of allowed string values.
-//	name - the flag name.
-//	usage - the usage description for the flag.
 //
 // Returns:
 //
 //	A pointer to the created Flag.
 func NewFlag(
-	defaultValue string,
-	value *string,
-	allowed []string,
-	name string,
-	usage string,
+	defaultMode Mode,
+	allowed []Mode,
 ) *Flag {
+	// Convert allowed modes to a slice of strings
+	allowedModesStr := make([]string, len(allowed))
+	for i, mode := range allowed {
+		allowedModesStr[i] = string(mode)
+	}
+
+	// Convert the default mode to string
+	defaultModeStr := string(defaultMode)
+
 	return &Flag{
-		Flag: *goflags.NewFlag(defaultValue, value, allowed, name, usage),
+		Flag: *goflags.NewFlag(
+			&defaultModeStr,
+			allowedModesStr,
+			FlagName,
+			fmt.Sprintf(
+				FlagUsage,
+				strings.Join(allowedModesStr, ", "),
+				defaultModeStr,
+			),
+		),
 	}
 }
 
@@ -153,7 +152,9 @@ func (f *Flag) IsSetup() bool {
 	return f.Value() == string(Setup)
 }
 
-// init initializes the mode flag.
-func init() {
-	ModeFlag.SetFlag()
+// SetFlag initializes the mode flag
+func SetFlag(flag *Flag) {
+	if flag != nil {
+		flag.SetFlag()
+	}
 }

@@ -1,6 +1,6 @@
 package mode
 
-const (
+var (
 	// FlagName is the name of the mode flag.
 	FlagName = "mode"
 
